@@ -1,0 +1,144 @@
+﻿@model Subcategory
+<!-- the asp-action Create below refers to teh POST version of the Create controller-->
+@*HTML forms encode types:
+    application/x-www-form-urlencoded (the default)
+    multipart/form-data for file uploads*@
+
+<form method="post" asp-action="Update" enctype="multipart/form-data">
+    <input asp-for="Key" hidden />
+    <div class="border p-3">
+        <div asp-validation-summary="All"></div>
+        <div class="form-group row">
+            <h2 class="text-black-50 pl-3">Update <strong>@Model.Title</strong> Subcategory</h2>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label asp-for="Title"></label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                </div>
+                <!-- Evaluation and medications  -->
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label asp-for="Evaluation"></label>
+                    </div>
+                    <div class="col-6">
+                        <label asp-for="Medications"></label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        <textarea asp-for="Evaluation" rows="4" cols="55" class="form-control"></textarea>
+                        <span asp-validation-for="Evaluation" class="text-danger"></span>
+                    </div>
+                    <div class="col-6">
+                        <textarea asp-for="Medications" rows="4" cols="55" class="form-control"></textarea>
+                        <span asp-validation-for="Medications" class="text-danger"></span>
+                    </div>
+                </div>
+                <!-- Mangement and symptoms  -->
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label asp-for="Management"></label>
+                    </div>
+                    <div class="col-6">
+                        <label asp-for="Signs"></label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        <textarea asp-for="Management" rows="4" cols="55" class="form-control"></textarea>
+                        <span asp-validation-for="Management" class="text-danger"></span>
+                    </div>
+                    <div class="col-6">
+                        <textarea asp-for="Signs" rows="4" cols="55" class="form-control"></textarea>
+                        <span asp-validation-for="Signs" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- References and Main Category(disabled on Update)  -->
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label asp-for="References"></label>
+                    </div>
+                    <div class="col-6">
+                        <!--this one is visible on the C# class model for Subcategory but not on the Sql table-->
+                        <label asp-for="SubId"></label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        <textarea asp-for="References" rows="4" cols="55" class="form-control"></textarea>
+                        <span asp-validation-for="References" class="text-danger"></span>
+                    </div>
+                    <div class="col-6">
+                        <select asp-for="SubId" asp-items="@ViewBag.MainKategoryListOfNames" class="form-control">
+                            @*<option selected>--select main  category</option>*@
+                        </select>
+                        <span asp-validation-for="SubId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                @***************************************
+                    Drag n' Drop zone begins below
+                    ********************************************@
+                <div class="form-group">
+                    <div class="col-6 control-label">
+                        <label asp-for="Pictures"></label>
+                    </div>
+
+                    <div class="preview-zone hidden">
+                        <div class="box box-solid">
+                            <div class="box-header with-border">
+                                <div class="text-info"><b>Preview Image</b></div>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-outline-danger btn-xs remove-preview">
+                                        <i class="fa fa-times"></i> Clear the Image
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body"></div>
+                        </div>
+                    </div>
+                    <div class="dropzone-wrapper">
+                        <div class="dropzone-desc">
+                            <i class="bi-cloud-upload" style="font-size: 2.5rem; color: cornflowerblue;"></i>
+
+                            <p>Choose an image file or drag it here.</p>
+                        </div>
+                        <input asp-for="Pictures" type="file" class="dropzone form-control">
+                        <span asp-validation-for="Pictures" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Update and go back buttons  -->
+                <div class="form-group row">
+                    <div class="col-8 mx-auto row">
+                        <div class="col">
+                            <input type="submit" class="btn btn-success w-75" value="Update" />
+                        </div>
+                        <div class="col">
+                            <a asp-controller="Subcategories" asp-action="Details" asp-route-id="@Model.Key" class="btn btn-dark w-75">Back</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    @{
+    <partial name="_ValidationScriptsPartial" />
+    }
+
+<link rel="stylesheet" href="~/css/style.css" />
+}

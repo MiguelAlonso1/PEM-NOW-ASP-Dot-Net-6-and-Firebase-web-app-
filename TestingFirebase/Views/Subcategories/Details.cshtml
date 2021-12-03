@@ -1,0 +1,134 @@
+﻿@model Subcategory
+
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Details page</h2>
+        </div>
+        <div class="col-6 btn-group text-right" role="group">
+            <a asp-controller="Subcategories" asp-action="Create" class="btn btn-primary mx-1">Create new Subcategory</a>
+            <a asp-controller="SubCategories" asp-action="Index" asp-route-id="@Model.SubId" class="btn btn-dark  mx-1">Back</a>
+        </div>
+        <div class="col-6">
+            <h2 class="text-black-50">Subcategory:<strong> @ViewBag.MainCategoryName</strong></h2>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-lg-6 col-xl-9 col-md-6 pb-4 mx-auto">
+        <div class="card " style="border:2px solid #43ac6a;border-radius:5px; background:url('/images/medical_pattern.png')">
+            <div class="pl-3 pt-1 text-center">
+                <h3 class="card-title text-primary"><b>@Model.Title</b></h3>
+            </div>
+            <div class="d-flex justify-content-between ">
+                <div class="pl-2"><a asp-controller="Subcategories" asp-action="Update" asp-route-id="@Model.Key" class="btn btn-primary">Update</a></div>
+                @*<div class="pr-2 text-danger h5"><b>ID: @Model.Key</b></div>*@
+                @*<div class="pr-2 h5"><a asp-controller="Subcategories" asp-action="DeletePost" asp-route-id="@Model.Key" class="btn btn-danger">Delete</a></div>*@
+                <div class="pr-2 h5">
+                    <a id="delMainCategory" data-toggle="modal"
+                       data-target="#exampleModal"
+                       data-id="@Model.Key" data-num="0" data-title="@Model.Title"
+                       class="btn btn-danger text-white">
+                        Delete
+                    </a>
+                </div>
+            </div>
+            @foreach( var str in @ViewBag.picURL)
+            {
+            <img src="@str" class="card-img-top p-2 rounded" width="500" height="500" sstyle="opacity: 1.0" />
+            }
+
+            <div class="w-100 btn-group" role="group">
+                <a class="btn  btn-outline-dark" data-toggle="collapse" href="#collapseExample_@Model.Key" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    Evaluation  >
+                </a>
+                <a class="btn  btn-outline-dark" data-toggle="collapse" href="#collapseMedications_@Model.Key" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    Medications >
+                </a>
+                <a class="btn  btn-outline-dark" data-toggle="collapse" href="#collapseManagement_@Model.Key" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    Management >
+                </a>
+                <a class="btn  btn-outline-dark" data-toggle="collapse" href="#collapseSymptoms_@Model.Key" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    Symptoms >
+                </a>
+                <a class="btn  btn-outline-dark" data-toggle="collapse" href="#collapseReferences_@Model.Key" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    References >
+                </a>
+            </div>
+
+            <!--Evaluation secion here -->
+            <div class="text-muted text-left pb-3">
+                <div class="collapse" id="collapseExample_@Model.Key">
+                    <div class="card card-body">
+                        <p><b>Evaluation</b><br />@Model.Evaluation</p>
+                    </div>
+                </div>
+            </div>
+
+            <!--Medications secion here -->
+            <div class="text-muted text-left pb-2">
+                <div class="collapse" id="collapseMedications_@Model.Key">
+                    <div class="card card-body">
+                        <p><b>Medications</b><br />@Model.Medications</p>
+                    </div>
+                </div>
+            </div>
+            @*Management secion here*@
+            <div class="text-muted text-left pb-3">
+                <div class="collapse" id="collapseManagement_@Model.Key">
+                    <div class="card card-body">
+                        <p><b>Management</b><br />@Model.Management</p>
+                    </div>
+                </div>
+            </div>
+            @*Sypmtoms secion here*@
+            <div class="text-muted text-left pb-3">
+
+                <div class="collapse" id="collapseSymptoms_@Model.Key">
+                    <div class="card card-body">
+                        <p><b>Symptoms</b><br />@Model.Signs</p>
+                    </div>
+                </div>
+            </div>
+            @*References secion here*@
+            <div class="text-muted text-left pb-3">
+
+
+                <div class="collapse" id="collapseReferences_@Model.Key">
+                    <div class="card card-body">
+                        <p><b>References</b><br />@Model.References</p>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary" id="exampleModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="delP"></p>
+            </div>
+            <div class="modal-footer">
+                <form id="deleteFormClient" method="post" asp-controller="Subcategories" asp-action="Delete" asp-route-id ="@Model.Key">
+                    @*<input asp-for="@Model.Key" hidden />*@
+                    <input type="submit" class="btn btn-danger" value="Delete" />
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

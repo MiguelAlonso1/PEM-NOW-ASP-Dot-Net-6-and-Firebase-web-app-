@@ -1,0 +1,113 @@
+﻿@model IEnumerable<Subcategory>
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#little_table').DataTable();
+        });
+    </script>
+</head>
+<body>
+    <div class="container p-3">
+        <div class="row pt-4">
+            <div class="col-6">
+                <h2 class="text-primary"> <span class="text-info">@ViewBag.MainCategoryName</span>  Subcategories</h2>
+            </div>
+            <div class="col-6 btn-group text-right" role="group">
+                <a asp-controller="Subcategories" asp-action="Create" class="btn btn-primary mx-1">Create New Subcategory</a>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-dark mx-1">Back</a>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="width:100%">
+        @if (Model.Count() > 0)
+        {
+            <table id="little_table" class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Image </th>
+                        <th>Title </th>
+                        @*<th>Maincategory ID </th>*@
+                        <th>Links </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var kat in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-controller="Subcategories" asp-action="Details" asp-route-id="@kat.Key" class="btn btn-outline-light">
+                                    <img class="media-object mx-4" src="\images\img.png" alt="image info" width="128" height="64" style="border: 2px solid #43ac6a; border-radius: 25px ">
+                                    @*<b>ID: @kat.Key</b>*@
+                                </a>
+                            </td>
+                            <td>
+                                <h4 class="media-heading text-dark"><strong>@kat.Title</strong></h4>
+                            </td>
+                            @*<td>
+                                    <h4 class="media-heading text-dark"><strong>@kat.SubId</strong></h4>
+                                </td>*@
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a asp-controller="Subcategories" asp-action="Details" asp-route-id="@kat.Key" class="btn btn-primary mx-1">Details</a>
+
+                                    <a id="delSubCategory" data-toggle="modal"
+                                       data-target="#exampleModal"
+                                       data-id="@kat.Key" data-num="0" data-title="@kat.Title"
+                                       class="btn btn-danger text-white mx-1">
+                                        Delete
+                                    </a>
+                                </div>
+                            </td>
+
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No items created yet</p>
+        }
+    </div>
+
+    <!-- Modal--  below form works through Jquery. See site.js under wwwroot folder for more info ;)-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-primary" id="exampleModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="delP"></p>
+                </div>
+                <div class="modal-footer">
+                    <form id="deleteFormClient" method="post">
+                        <input type="submit" class="btn btn-danger" value="Delete" />
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*<input name="notif" type="button" value="Show notify js" onclick="$('.elem-demo').notify('Hello Box');" />*@
+
+    @*<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$.notify('Hello World', 'success');">Close</button>
+
+    <div class="elem-demo">a Box</div>
+
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>*@
+</body>
+</html>
+
