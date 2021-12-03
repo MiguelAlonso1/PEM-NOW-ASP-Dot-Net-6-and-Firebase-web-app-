@@ -46,17 +46,44 @@ namespace TestingFirebase.Controllers
 
             var subCategoryList = new List<Subcategory>();
 
+            //******************************
+            string[] picURL = null;
+            picURL = new string[] { @"\images\img.png" };//gets default pic in case no pics were uploaded on the app
+
+
             /// Convert JSON data to original datatype
             foreach (var subCategory in subCategoryObj)
             {
+
+                //process pictures first
+                if (subCategory.Object.Image != null)//image here is and array of JSON pictures!!
+                {
+                    if (!subCategory.Object.Image.ToString().Equals("image"))//if equals to "image" means no pic,
+                    {
+                        //below converts JSON array into string array- firebaseObj.Object.Image references a JSON array
+                        picURL = JsonSerializer.Deserialize<string[]>(Convert.ToString(subCategory.Object.Image));
+                    }
+                    //viewbag gets reference to the string array of Base 64 enconded pics
+                    //this is a super long string of characters that are put on the "scr" attributes of img tags
+                    //the browser knows these are encoded pics and renders them as images on the websites
+            
+                }
+
                 subCategoryList.Add(new Subcategory
                 {
                     Key = Convert.ToString(subCategory.Key),
                     Title = Convert.ToString(subCategory.Object.Title),
                     SubId = Convert.ToString(subCategory.Object.SubId),
+                    Image = picURL[0]//only a pic will be required for datatables so element 0 of array must be dereferenced
                 });
+
+                //PicURL needs to be reset to the placeholder picture; otherwise the image from the previous element
+                //can be mistakenly assigned to a next object that may not be supposed to have one!!!
+                picURL = new string[] { @"\images\img.png" };
             }
 
+
+           
             @ViewBag.MainCategoryName = id switch//switch expression
             {
                 "c1" => "Medical",

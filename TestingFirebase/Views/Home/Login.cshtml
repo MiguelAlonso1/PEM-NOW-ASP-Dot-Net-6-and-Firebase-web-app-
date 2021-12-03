@@ -11,20 +11,35 @@
     <div class="col-md-4">
         <form asp-action="Login">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
+         @*       <label asp-for="Email" class="control-label"></label>*@
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">
+                            <i class="bi bi-person-check-fill" style="color: cornflowerblue;"> </i>
+                        </span>
+                    </div>
+                    <input asp-for="Email" class="form-control" placeholder="Username" />
+                </div>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                
-                <input asp-for="Password" class="form-control" type ="password"/>
-                
+        @*      <label asp-for="Password" class="control-label"></label>*@
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">
+                            <i class="bi bi-key-fill" style="color: cornflowerblue;"> </i>
+                        </span>
+                    </div>
+                    <input asp-for="Password" class="form-control" type="password" placeholder="Password" />
+                </div>
+
                 <span asp-validation-for="Password" class="text-danger"></span>
 
             </div>
-
             <div class="form-group">
                 <input type="submit" value="Login" class="btn btn-primary form-control" />
             </div>
@@ -38,5 +53,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
 }
