@@ -1,9 +1,9 @@
 ﻿
 /*Drag n' Drop Image Zone */
-.container {
+/*.container {
     padding: 50px 10%;
 }
-
+*/
 .box {
     position: relative;
     background: #ffffff;
@@ -72,3 +72,5 @@
     background-color: crimson;
     border: 1px solid #212121;
 }
+
+
