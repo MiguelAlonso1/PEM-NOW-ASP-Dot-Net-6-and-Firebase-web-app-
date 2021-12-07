@@ -17,7 +17,8 @@ namespace TestingFirebase.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         FirebaseAuthProvider _auth;
-        string _FirebaseAPIKey = "AIzaSyB9-PR4nCk8T6nNtqvnMhYFLyxr7ZLXJV8";
+        string _FirebaseAPIKey = "AIzaSyCBGtzohPw6nkvQub6Bj4LqAOUBcDz0TRQ";
+        
         FirebaseClient firebaseClient;
 
         public HomeController(ILogger<HomeController> logger)
@@ -25,7 +26,7 @@ namespace TestingFirebase.Controllers
             _logger = logger;
             _auth = new FirebaseAuthProvider(
                          new FirebaseConfig(this._FirebaseAPIKey));
-            firebaseClient = new FirebaseClient("https://med-app-519aa.firebaseio.com/");
+            firebaseClient = new FirebaseClient("https://pemdata-2f1d1-default-rtdb.firebaseio.com/");
         }
 
 
@@ -41,16 +42,25 @@ namespace TestingFirebase.Controllers
             //var result = await firebaseClient
             //.Child("Users/" + userId + "/Logins")
             //.PostAsync(currentUserLogin);
-        
 
+
+            IReadOnlyCollection<FirebaseObject<Subcategory>> dbLogins = null;
             //Retrieve data from Firebase
-            var dbLogins = await firebaseClient
-            .Child("categories")
-            .OrderByKey()
-            //.LimitToFirst(2)
-            .OnceAsync<Subcategory>();
+            try
+            {
+                dbLogins = await firebaseClient
+                .Child("categories")
+                .OrderByKey()
+                //.LimitToFirst(2)
+                .OnceAsync<Subcategory>();
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError(string.Empty, "NO DATA FOUND!\n" +
+                    "Error while querying Firebase" + " " + e.Message);
+            }
 
-            var mainCategoriesList = new List<MainCategory>();
+                var mainCategoriesList = new List<MainCategory>();
 
             var mainKatIds  = new string []{"c1", "c2","c3","c4","c5"};
             var subCategoryCount = new int();
@@ -89,13 +99,22 @@ namespace TestingFirebase.Controllers
                     ImageUrl = @"\images\" + val + ".jpg"//Verbatim string and konkat for pic
                 });
 
-           
+
 
                 //var subCategoryObj = subCatList;
                 // var subCategoryObj = dbLogins.Where(x => x.Object.SubId.Equals(id));
-                subCategoryCount = dbLogins.Count(x => x.Object.SubId.Equals(val));
+
+                //if Firebase subcategories is empty, then make count zero
+                if (dbLogins == null)
+                    {
+                    subCategoryCount = 0;
+                }
+               else 
+                    subCategoryCount = dbLogins.Count(x => x.Object.SubId.Equals(val));
             }
 
+            //Here dbLogins can be null since the Firebase table can be empty, so the view handles nulls
+            // and makes number of categories 0
             @ViewBag.subCatList = dbLogins;
 
                 return View(mainCategoriesList);
@@ -115,16 +134,31 @@ namespace TestingFirebase.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(LoginModel userModel)
         {
-            //create the user
-            await _auth.CreateUserWithEmailAndPasswordAsync(userModel.Email, userModel.Password);
-            //log in the new user
-            var fbAuthLink = await _auth
-                            .SignInWithEmailAndPasswordAsync(userModel.Email, userModel.Password);
-            string token = fbAuthLink.FirebaseToken;
-            //saving the token in a session variable
-            if (token != null)
+            string token = null;
+            UserSession.token = null;
+            UserSession.userName = null;
+            try
+            {
+                //create the user
+                await _auth.CreateUserWithEmailAndPasswordAsync(userModel.Email, userModel.Password);
+                //log in the new user
+                var fbAuthLink = await _auth
+                                .SignInWithEmailAndPasswordAsync(userModel.Email, userModel.Password);
+                token = fbAuthLink.FirebaseToken;
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Error while trying to register an account");
+            }
+
+             //saving the token in a session variable
+             if (token != null)
             {
                 HttpContext.Session.SetString("_UserToken", token);
+
+                //set model to display user logged info on menu
+                UserSession.token = token;
+                UserSession.userName = userModel.Email;
 
                 return RedirectToAction("Index");
             }
@@ -165,10 +199,7 @@ namespace TestingFirebase.Controllers
                 HttpContext.Session.SetString("_UserToken", token);
                 UserSession.token =  token;
                 UserSession.userName = userModel.Email;
-                //if (!ModelState.IsValid)
-                //{
-                //    return View();
-                //}
+              
                 return RedirectToAction("Index");
             }
             else

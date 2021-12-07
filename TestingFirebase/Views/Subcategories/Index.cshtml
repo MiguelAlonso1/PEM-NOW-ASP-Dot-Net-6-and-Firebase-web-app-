@@ -10,6 +10,8 @@
         });
     </script>
 </head>
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 <body>
     <div class="container p-3">
         <div class="row pt-4">
@@ -111,3 +113,8 @@
 </body>
 </html>
 
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+}

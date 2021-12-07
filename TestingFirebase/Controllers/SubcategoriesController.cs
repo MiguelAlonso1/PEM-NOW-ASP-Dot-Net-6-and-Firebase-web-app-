@@ -19,7 +19,7 @@ namespace TestingFirebase.Controllers
 
         public SubcategoriesController()
         {
-            firebaseClient = new FirebaseClient("https://med-app-519aa.firebaseio.com/");
+            firebaseClient = new FirebaseClient("https://pemdata-2f1d1-default-rtdb.firebaseio.com/");
         }
         public async Task<IActionResult> Index(string id)
         {
@@ -35,14 +35,32 @@ namespace TestingFirebase.Controllers
             //.PostAsync(currentUserLogin);
 
             //Retrieve data from Firebase
-            var subCatList = await firebaseClient
-            .Child("categories")
-            .OrderByKey()
-            .OnceAsync<Subcategory>();
+
+            IReadOnlyCollection<FirebaseObject<Subcategory>> subCatList = null;
+
+            try
+            {
+               subCatList = await firebaseClient
+           .Child("categories")
+           .OrderByKey()
+           .OnceAsync<Subcategory>();
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError(string.Empty, "NO DATA FOUND!\n" +
+                    "Error while querying Firebase" + " " + e.Message);
+            }
 
             //var subCategoryObj = subCatList;
             //filter result query to only the choosen main medical kategory (id)
-            var subCategoryObj = subCatList.Where(x => x.Object.SubId.Equals(id));
+
+
+            IEnumerable<FirebaseObject<Subcategory>> subCategoryObj = null;
+
+            if (subCatList != null)
+           
+                subCategoryObj = subCatList.Where(x => x.Object.SubId.Equals(id));
+           
 
             var subCategoryList = new List<Subcategory>();
 
@@ -50,36 +68,39 @@ namespace TestingFirebase.Controllers
             string[] picURL = null;
             picURL = new string[] { @"\images\img.png" };//gets default pic in case no pics were uploaded on the app
 
-
-            /// Convert JSON data to original datatype
-            foreach (var subCategory in subCategoryObj)
+            //this is because the Firebase database can be empty
+            if (subCategoryObj != null)
             {
-
-                //process pictures first
-                if (subCategory.Object.Image != null)//image here is and array of JSON pictures!!
+                /// Convert JSON data to original datatype
+                foreach (var subCategory in subCategoryObj)
                 {
-                    if (!subCategory.Object.Image.ToString().Equals("image"))//if equals to "image" means no pic,
+
+                    //process pictures first
+                    if (subCategory.Object.Image != null)//image here is and array of JSON pictures!!
                     {
-                        //below converts JSON array into string array- firebaseObj.Object.Image references a JSON array
-                        picURL = JsonSerializer.Deserialize<string[]>(Convert.ToString(subCategory.Object.Image));
+                        if (!subCategory.Object.Image.ToString().Equals("image"))//if equals to "image" means no pic,
+                        {
+                            //below converts JSON array into string array- firebaseObj.Object.Image references a JSON array
+                            picURL = JsonSerializer.Deserialize<string[]>(Convert.ToString(subCategory.Object.Image));
+                        }
+                        //viewbag gets reference to the string array of Base 64 enconded pics
+                        //this is a super long string of characters that are put on the "scr" attributes of img tags
+                        //the browser knows these are encoded pics and renders them as images on the websites
+
                     }
-                    //viewbag gets reference to the string array of Base 64 enconded pics
-                    //this is a super long string of characters that are put on the "scr" attributes of img tags
-                    //the browser knows these are encoded pics and renders them as images on the websites
-            
+
+                    subCategoryList.Add(new Subcategory
+                    {
+                        Key = Convert.ToString(subCategory.Key),
+                        Title = Convert.ToString(subCategory.Object.Title),
+                        SubId = Convert.ToString(subCategory.Object.SubId),
+                        Image = picURL[0]//only a pic will be required for datatables so element 0 of array must be dereferenced
+                    });
+
+                    //PicURL needs to be reset to the placeholder picture; otherwise the image from the previous element
+                    //can be mistakenly assigned to a next object that may not be supposed to have one!!!
+                    picURL = new string[] { @"\images\img.png" };
                 }
-
-                subCategoryList.Add(new Subcategory
-                {
-                    Key = Convert.ToString(subCategory.Key),
-                    Title = Convert.ToString(subCategory.Object.Title),
-                    SubId = Convert.ToString(subCategory.Object.SubId),
-                    Image = picURL[0]//only a pic will be required for datatables so element 0 of array must be dereferenced
-                });
-
-                //PicURL needs to be reset to the placeholder picture; otherwise the image from the previous element
-                //can be mistakenly assigned to a next object that may not be supposed to have one!!!
-                picURL = new string[] { @"\images\img.png" };
             }
 
 
@@ -93,6 +114,7 @@ namespace TestingFirebase.Controllers
                 "c5" => "Foreign Ingestion",
                 _ => "Medical",//default case
             };
+            //subcaterolyList can be empty since Firebase can be empty
             return View(subCategoryList);
         }
 
@@ -243,7 +265,12 @@ namespace TestingFirebase.Controllers
           
                   //new object has to be build on the fly***************
                   //cuz I needed to remove the pictures variable
-           var result = await firebaseClient
+
+           
+            //****************************************************
+            try
+            {
+                var result = await firebaseClient
            .Child("categories")
             .PostAsync(new Subcategory
             {
@@ -258,8 +285,12 @@ namespace TestingFirebase.Controllers
                 References = Convert.ToString(obj.References),
                 Image = newImgsArray// Fireabase Image represents an array of pics not a single pic!
             });
-             //****************************************************
-
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError(string.Empty, "Isuee updating!\n" +
+                    "Error while inserting new record Firebase" + " " + e.Message);
+            }
 
             //to the Index in Categories since this controller is in Categories
             return RedirectToAction("Index", new { Id = obj.SubId });

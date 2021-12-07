@@ -11,6 +11,7 @@
     </div>
 </div>
 
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 <div class="row">
     @if (Model.Count() > 0)
     {
@@ -28,13 +29,19 @@
                             var list = @ViewBag.subCatList;
 
                             int numberOfSubCategories = 0;
-                            foreach (var obj in list)
+
+                            if (list != null)
                             {
-                                if (obj.Object.SubId.Equals(@kat.Key))
+                                foreach (var obj in list)
                                 {
-                                    numberOfSubCategories++;
+                                    if (obj.Object.SubId.Equals(@kat.Key))
+                                    {
+                                        numberOfSubCategories++;
+                                    }
                                 }
                             }
+                            else
+                                numberOfSubCategories = 0;
                         }
 
                         <div class="pr-2 h5">
@@ -98,3 +105,10 @@
         </div>
     </div>
 </div>
+
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+}
