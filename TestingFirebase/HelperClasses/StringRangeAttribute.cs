@@ -4,11 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TestingFirebase.HelperClasses
-{
+namespace TestingFirebase.HelperClasses;//Miguel upgraded this to scoped namespaces -a C# 10 new feature
     public class StringRangeAttribute : ValidationAttribute
     {
-        public string[] AllowableValues { get; set; }
+        public string[]? AllowableValues { get; set; }
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
@@ -36,6 +35,3 @@ namespace TestingFirebase.HelperClasses
     //        return new ValidationResult("Please enter a correct value");
     //    }
     //}
-
-     
-}

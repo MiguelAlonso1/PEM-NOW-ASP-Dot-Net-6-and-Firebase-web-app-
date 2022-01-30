@@ -5,6 +5,10 @@
     {
       "library": "bootstrap-icons@1.7.1",
       "destination": "wwwroot/bootstrap-icons/"
+    },
+    {
+      "library": "lightbox2@2.11.3",
+      "destination": "wwwroot/lightbox2/"
     }
   ]
 }

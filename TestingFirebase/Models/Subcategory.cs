@@ -3,9 +3,8 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using TestingFirebase.HelperClasses;
 
-namespace TestingFirebase.Models
-{
-    public class Subcategory
+namespace TestingFirebase.Models;//Miguel upgraded this to scoped namespaces -a C# 10 new feature
+public class Subcategory
     {
         [Key]
         public string Key { get; set; }//primary key. A sequence is created and incremented by default
@@ -44,4 +43,3 @@ namespace TestingFirebase.Models
         [Required(ErrorMessage = "An Image Needs to be Uploaded")]
         public IFormFile Pictures { get; set; }
     }
-}

@@ -41,8 +41,8 @@
                     {
                         <tr>
                             <td>
-                                <a asp-controller="Subcategories" asp-action="Details" asp-route-id="@kat.Key" class="btn btn-outline-light">
-                                    <img class="media-object mx-4" src="@kat.Image" alt="image info" width="320" height="150">
+                                <a href="@kat.Image" data-lightbox="@kat.Key" data-title="My caption" class="btn btn-outline-light">
+                                    <img class="media-object mx-4" src="@kat.Image" alt="image info" width="320" height="150" >
                                     @*<b>ID: @kat.Key</b>*@
                                 </a>
                             </td>
@@ -54,7 +54,10 @@
                                 </td>*@
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a asp-controller="Subcategories" asp-action="Details" asp-route-id="@kat.Key" class="btn btn-primary mx-1">Details</a>
+                                    <a asp-controller="Subcategories" asp-action="Details" 
+                                    asp-route-id="@kat.Key" class="btn btn-primary mx-1">
+                                    Details
+                                </a>
 
                                     <a id="delSubCategory" data-toggle="modal"
                                        data-target="#exampleModal"

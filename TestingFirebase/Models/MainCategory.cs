@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;//for DisplayName
 
-namespace TestingFirebase.Models
-{
-    public class MainCategory
+namespace TestingFirebase.Models;//Miguel upgraded this to scoped namespaces -a C# 10 new feature
+public class MainCategory
     {
         // [System.ComponentModel.DataAnnotations.Key]
         [Key]
@@ -28,4 +27,3 @@ namespace TestingFirebase.Models
         [Required(ErrorMessage = "An Image Url is required, boi!")]
         public string ImageUrl { get; set; }
     }
-}

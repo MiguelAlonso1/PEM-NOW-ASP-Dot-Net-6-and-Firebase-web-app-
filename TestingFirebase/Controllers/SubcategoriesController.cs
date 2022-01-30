@@ -11,9 +11,9 @@ using TestingFirebase.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 
-namespace TestingFirebase.Controllers
-{
-    public class SubcategoriesController : Controller
+namespace TestingFirebase.Controllers;//Miguel upgraded this to scoped namespaces -a C# 10 new feature
+
+public class SubcategoriesController : Controller
     {
         FirebaseClient firebaseClient;
 
@@ -545,4 +545,3 @@ namespace TestingFirebase.Controllers
             return RedirectToAction("Index", new { id = MainCategoryKeyID });
         }
     }
-}
