@@ -363,4 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Ignore file with Firebase Database secrets
-/pemdata-2f1d1-firebase-adminsdk-i7d8f-55aad4b3ee.json
+pemdata-2f1d1-firebase-adminsdk-i7d8f-55aad4b3ee.json
