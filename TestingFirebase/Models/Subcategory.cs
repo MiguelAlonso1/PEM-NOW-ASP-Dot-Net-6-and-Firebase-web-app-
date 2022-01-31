@@ -12,9 +12,6 @@ public class Subcategory
         [Required(ErrorMessage = "Title can't be empty!")]
         public string Title { get; set; }
 
-        //[Required(ErrorMessage = "Color can't be empty!")]
-        public string Color { get; set; }
-
         [Required(ErrorMessage = "Evaluation can't be empty!")]
         public string Evaluation { get; set; }
 

@@ -158,7 +158,7 @@ public class SubcategoriesController : Controller
                 Key = Convert.ToString(firebaseObj.Key),
                 SubId = Convert.ToString(firebaseObj.Object.SubId),
                 Title = Convert.ToString(firebaseObj.Object.Title),
-                Color = Convert.ToString(firebaseObj.Object.Color),
+             
                 Evaluation = Convert.ToString(firebaseObj.Object.Evaluation),
                 Management = Convert.ToString(firebaseObj.Object.Management),
                 Medications = Convert.ToString(firebaseObj.Object.Medications),
@@ -277,7 +277,6 @@ public class SubcategoriesController : Controller
                 //Key = Convert.ToString(firebaseObj.Key),
                 SubId = Convert.ToString(obj.SubId),
                 Title = Convert.ToString(obj.Title),
-                Color = Convert.ToString(obj.Color),
                 Evaluation = Convert.ToString(obj.Evaluation),
                 Management = Convert.ToString(obj.Management),
                 Medications = Convert.ToString(obj.Medications),
@@ -288,7 +287,7 @@ public class SubcategoriesController : Controller
             }
             catch (Exception e)
             {
-                ModelState.AddModelError(string.Empty, "Isuee updating!\n" +
+                ModelState.AddModelError(string.Empty, "Issue updating!\n" +
                     "Error while inserting new record Firebase" + " " + e.Message);
             }
 
@@ -331,7 +330,7 @@ public class SubcategoriesController : Controller
                 Key = Convert.ToString(firebaseObj.Key),
                 SubId = Convert.ToString(firebaseObj.Object.SubId),
                 Title = Convert.ToString(firebaseObj.Object.Title),
-                Color = Convert.ToString(firebaseObj.Object.Color),
+             
                 Evaluation = Convert.ToString(firebaseObj.Object.Evaluation),
                 Management = Convert.ToString(firebaseObj.Object.Management),
                 Medications = Convert.ToString(firebaseObj.Object.Medications),
@@ -426,7 +425,7 @@ public class SubcategoriesController : Controller
                 //Key = Convert.ToString(firebaseObj.Key),
                 SubId = Convert.ToString(obj.SubId),
                 Title = Convert.ToString(obj.Title),
-                Color = Convert.ToString(obj.Color),
+         
                 Evaluation = Convert.ToString(obj.Evaluation),
                 Management = Convert.ToString(obj.Management),
                 Medications = Convert.ToString(obj.Medications),
